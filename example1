@@ -1,0 +1,28 @@
+//@version=4
+study(title="Relative Strength Index", shorttitle="RSI_지표만들기 예제")  // 속성 / 제목
+src = close  //종가 즉, 기준이 되는 가격 시점 설정
+len = input(14, minval=1, title="Length")  //
+per1 = input(40, minval=1, title="mid_under")
+per2 = input(55, minval=1, title="mid_upper")
+//
+up = rma(max(change(src), 0), len)
+down = rma(-min(change(src), 0), len)
+//
+rsi = down == 0 ? 100 : up == 0 ? 0 : 100 - 100 / (1 + up / down)
+//
+plot(rsi, color=color.gray)
+//
+band1 = hline(70)
+band0 = hline(30)
+band2 = hline(per2)
+band3 = hline(per1)
+fill(band3, band2, color=color.black, transp=50)
+//
+fill(band1, band0, color=color.black, transp=90)
+//
+a = rsi - 70 > 0
+b = rsi - 30 < 0
+c = per1 < rsi and rsi < per2
+plot(a ? rsi : na, color=color.red, style=plot.style_circles, linewidth=3, transp=70)
+plot(b ? rsi : na, color=color.lime, style=plot.style_circles, linewidth=3, transp=70)
+plot(c ? rsi : na, color=color.orange, style=plot.style_circles, linewidth=3, transp=70)
